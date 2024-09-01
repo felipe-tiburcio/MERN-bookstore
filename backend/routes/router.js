@@ -4,8 +4,19 @@ export const router = express.Router();
 
 import { Book } from "../models/bookModel.js";
 
-router.get("/", (req, res) => {
-  return res.status(234).send("Hello Node with separated routes!");
+router.get("/books", async (req, res) => {
+  try {
+    const books = await Book.find();
+
+    return res.status(200).json({
+      count: books.length,
+      data: books,
+    });
+  } catch (error) {
+    console.log(error.message);
+
+    res.status(500).send({ message: error.message });
+  }
 });
 
 router.post("/books", async (req, res) => {
