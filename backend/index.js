@@ -5,6 +5,8 @@ import { router } from "./routes/router.js";
 
 const app = express();
 
+app.use(express.json());
+
 const PORT = process.env.PORT;
 const mongoDbUrl = process.env.MONGO_DB_URL;
 
