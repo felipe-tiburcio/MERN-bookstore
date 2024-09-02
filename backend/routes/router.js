@@ -19,6 +19,17 @@ router.get("/books", async (req, res) => {
   }
 });
 
+router.get("/books/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const book = await Book.findById(id);
+
+    res.status(200).json(book);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+});
+
 router.post("/books", async (req, res) => {
   try {
     if (!req.body.title || !req.body.author || !req.body.publishYear) {
