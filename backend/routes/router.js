@@ -55,3 +55,27 @@ router.post("/books", async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 });
+
+router.put("/books/:id", async (req, res) => {
+  try {
+    if (!req.body.title || !req.body.author || !req.body.publishYear) {
+      return res.status(400).send({
+        message:
+          "Please send all required fields: title, author and publish year.",
+      });
+    }
+
+    const { id } = req.params;
+
+    const result = await Book.findByIdAndUpdate(id, req.body);
+
+    if (!result) {
+      res.status(404).json({ message: "Book not found" });
+    }
+
+    return res.status(200).send({ message: "Book updated" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+});
