@@ -1,16 +1,16 @@
 import express from "express";
 import dotenv from "dotenv/config";
 import mongoose from "mongoose";
-import { router } from "./routes/router.js";
+import bookRoutes from "./routes/booksRoutes.js";
+
+const PORT = process.env.PORT;
+const mongoDbUrl = process.env.MONGO_DB_URL;
 
 const app = express();
 
 app.use(express.json());
 
-const PORT = process.env.PORT;
-const mongoDbUrl = process.env.MONGO_DB_URL;
-
-app.use("/", router);
+app.use("/books", bookRoutes);
 
 mongoose
   .connect(mongoDbUrl)
