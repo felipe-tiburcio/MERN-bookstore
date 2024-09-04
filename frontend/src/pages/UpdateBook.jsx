@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const UpdateBook = () => {
   const [title, setTitle] = useState("");
@@ -11,6 +13,7 @@ const UpdateBook = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setLoading(true);
@@ -22,7 +25,13 @@ const UpdateBook = () => {
         setAuthor(response.data.author);
         setPublishYear(response.data.publishYear);
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        enqueueSnackbar(
+          "Some error has occurred... please check console for more information.",
+          { variant: "error" }
+        );
+        console.log(error);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -36,9 +45,16 @@ const UpdateBook = () => {
     axios
       .put(`http://localhost:3000/books/${id}`, data)
       .then(() => {
+        enqueueSnackbar("Book updated successfully", { variant: "success" });
         navigate("/");
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        enqueueSnackbar(
+          "Some error has occurred... please check console for more information.",
+          { variant: "error" }
+        );
+        console.log(error);
+      })
       .finally(() => {
         setLoading(false);
       });
